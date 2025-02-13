@@ -28,13 +28,15 @@ const app = express();
 // CORS MIDDLEWARE SETUP
 app.use(
   cors({
-    credentials: true,
     origin: [
       'http://localhost:3000',
-      'https://travel-guru.herokuapp.com',
-      'http://travel-guru.herokuapp.com'
+      'https://client-travel-guru.onrender.com',
+      'http://client-travel-guru.onrender.com'
     ],
-  }),
+    credentials: true, 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"], 
+  })
 );
 
 // SESSION MIDDLEWARE
@@ -49,6 +51,8 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: false, // Must be false for local testing (true for HTTPS)
+      sameSite: "lax", // Ensures cookies are sent properly
     },
   }),
 );

@@ -8,7 +8,7 @@ const Post = require('../models/post.model');
 const Comment = require('../models/comment.model')
 const TravelLog = require('../models/TravelLog.model')
 const saltRounds = 10;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 //requiring the 'fake' objects
 const users = require('./user-mock-data');
