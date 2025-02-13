@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const createError = require("http-errors");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
+
 const saltRounds = 10;
 const User = require("../models/user.model");
 
@@ -69,19 +70,21 @@ router.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
     .then((user) => {
       if (!user) {
         // If user with that username can't be found, respond with an error
-        return next(createError(404));  // Not Found
+        return next(createError(404, 'Not Found - User does not exist'));
       }
       const passwordIsValid = bcrypt.compareSync(password, user.password); //  true/false
       if (passwordIsValid) {
         // set the `req.session.currentUser`, to trigger creation of the session
         user.password = "*******";
         req.session.currentUser = user;
+        console.log('Session after login:', req.session);
+        console.log('Current user set to:', req.session.currentUser);
         res
           .status(200)
           .json(user);
       }
       else {
-        next(createError(401)); // Unathorized
+        next(createError(401, 'Unauthorized - Invalid password'));
       }
     })
     .catch((err) => {

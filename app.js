@@ -28,15 +28,16 @@ const app = express();
 // CORS MIDDLEWARE SETUP
 app.use(
   cors({
-    credentials: true,
     origin: [
       'http://localhost:3000',
-      'https://travel-guru.herokuapp.com',
-      'http://travel-guru.herokuapp.com'
+      'https://travel-guru-iqpy.onrender.com',
+      'http://travel-guru-iqpy.onrender.com'
     ],
-  }),
+    credentials: true, 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"], 
+  })
 );
-
 // SESSION MIDDLEWARE
 app.use(
   session({
@@ -58,7 +59,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 // ROUTER MIDDLEWARE
 app.use('/auth', authRouter);
@@ -67,7 +68,7 @@ app.use('/api', apiRouter);
 // ROUTE FOR SERVING REACT APP (index.html)
 app.use((req, res, next) => {
   // If no previous routes match the request, send back the React app.
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(__dirname + "/build/index.html");
 });
 
 // ERROR HANDLING
